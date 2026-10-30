@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Thi Trắc Nghiệm Tiếng Anh</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --success-color: #34a853;
+            --error-color: #ea4335;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #202124;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 20px;
+        }
+
+        header {
+            grid-column: 1 / -1;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 2px solid var(--primary-color);
+            border-radius: 6px;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .nav-btn {
+            padding: 8px;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .nav-btn.answered {
+            background: #e8f0fe;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .section-title {
+            background: #e8f0fe;
+            color: var(--primary-color);
+            padding: 10px 15px;
+            border-left: 4px solid var(--primary-color);
+            margin: 30px 0 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .reading-passage {
+            background: #f1f3f4;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            white-space: pre-line;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background: #f8f9fa;
+        }
+
+        .option-label input {
+            margin-right: 12px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: #1557b0;
+        }
+
+        #result-box {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+        }
+
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>BÀI THI MÔN TIẾNG ANH - ĐỀ CƯƠNG ÔN TẬP</h1>
+        <p>Thời gian làm bài: 60 phút | Trắc nghiệm Kỹ năng Ngôn ngữ & Đọc hiểu</p>
+    </header>
+
+    <div class="main-content">
+        <form id="exam-form">
+
+            <!-- SECTION I: USE OF ENGLISH -->
+            <div class="section-title">I. USE OF ENGLISH</div>
+            <p><i>Mark the letter A, B, C, or D to indicate the correct answer to each of the following questions.</i></p>
+
+            <div class="question-card" id="q1">
+                <div class="question-text">Question 1. During the COVID-19 __________, residents were advised to stay at home to avoid further spread of the disease.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q1" value="A"> A. pandemic</label>
+                    <label class="option-label"><input type="radio" name="q1" value="B"> B. complication</label>
+                    <label class="option-label"><input type="radio" name="q1" value="C"> C. side effects</label>
+                    <label class="option-label"><input type="radio" name="q1" value="D"> D. enamel</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q2">
+                <div class="question-text">Question 2. The city is designed with well-planned parking __________ for residents, visitors and commuters.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q2" value="A"> A. paces</label>
+                    <label class="option-label"><input type="radio" name="q2" value="B"> B. faces</label>
+                    <label class="option-label"><input type="radio" name="q2" value="C"> C. spaces</label>
+                    <label class="option-label"><input type="radio" name="q2" value="D"> D. laces</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q3">
+                <div class="question-text">Question 3. You can change your eating habits and lead a healthier __________.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q3" value="A"> A. health</label>
+                    <label class="option-label"><input type="radio" name="q3" value="B"> B. development</label>
+                    <label class="option-label"><input type="radio" name="q3" value="C"> C. lifestyle</label>
+                    <label class="option-label"><input type="radio" name="q3" value="D"> D. muscles</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q4">
+                <div class="question-text">Question 4. Computers are now being brought into this career to perform __________ tasks.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q4" value="A"> A. possible</label>
+                    <label class="option-label"><input type="radio" name="q4" value="B"> B. inactive</label>
+                    <label class="option-label"><input type="radio" name="q4" value="C"> C. complete</label>
+                    <label class="option-label"><input type="radio" name="q4" value="D"> D. repetitive</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q5">
+                <div class="question-text">Question 5. The instructions give a balanced __________ and protect against infections.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q5" value="A"> A. physic</label>
+                    <label class="option-label"><input type="radio" name="q5" value="B"> B. treatment</label>
+                    <label class="option-label"><input type="radio" name="q5" value="C"> C. diet</label>
+                    <label class="option-label"><input type="radio" name="q5" value="D"> D. injury</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q6">
+                <div class="question-text">Question 6. You must be very __________ if you do so much running.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q6" value="A"> A. fit</label>
+                    <label class="option-label"><input type="radio" name="q6" value="B"> B. active</label>
+                    <label class="option-label"><input type="radio" name="q6" value="C"> C. complete</label>
+                    <label class="option-label"><input type="radio" name="q6" value="D"> D. infectious</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q7">
+                <div class="question-text">Question 7. Regular exercise will help to strengthen your __________.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q7" value="A"> A. lifestyle</label>
+                    <label class="option-label"><input type="radio" name="q7" value="B"> B. muscles</label>
+                    <label class="option-label"><input type="radio" name="q7" value="C"> C. treatment</label>
+                    <label class="option-label"><input type="radio" name="q7" value="D"> D. development</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q8">
+                <div class="question-text">Question 8. We focus on the importance of __________ participation by elderly people in the life of the community.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q8" value="A"> A. huge</label>
+                    <label class="option-label"><input type="radio" name="q8" value="B"> B. contagious</label>
+                    <label class="option-label"><input type="radio" name="q8" value="C"> C. repetitive</label>
+                    <label class="option-label"><input type="radio" name="q8" value="D"> D. active</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q9">
+                <div class="question-text">Question 9. The doctor told him to __________ on his drinking.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q9" value="A"> A. look at</label>
+                    <label class="option-label"><input type="radio" name="q9" value="B"> B. cut down</label>
+                    <label class="option-label"><input type="radio" name="q9" value="C"> C. work out</label>
+                    <label class="option-label"><input type="radio" name="q9" value="D"> D. suffer from</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q10">
+                <div class="question-text">Question 10. I'm taking __________ for a throat infection.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q10" value="A"> A. antibiotics</label>
+                    <label class="option-label"><input type="radio" name="q10" value="B"> B. natural remedies</label>
+                    <label class="option-label"><input type="radio" name="q10" value="C"> C. traditional therapies</label>
+                    <label class="option-label"><input type="radio" name="q10" value="D"> D. acupressure</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q11">
+                <div class="question-text">Question 11. She suffers __________ a rare bone disease.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q11" value="A"> A. with</label>
+                    <label class="option-label"><input type="radio" name="q11" value="B"> B. on</label>
+                    <label class="option-label"><input type="radio" name="q11" value="C"> C. from</label>
+                    <label class="option-label"><input type="radio" name="q11" value="D"> D. for</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q12">
+                <div class="question-text">Question 12. No hurting anyone's feelings or body, and asking permission to borrow other people's belongings are examples of __________ behavior.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q12" value="A"> A. mature</label>
+                    <label class="option-label"><input type="radio" name="q12" value="B"> B. cultural</label>
+                    <label class="option-label"><input type="radio" name="q12" value="C"> C. respectful</label>
+                    <label class="option-label"><input type="radio" name="q12" value="D"> D. generational</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q13">
+                <div class="question-text">Question 13. As children get older and more __________, the rules can develop with them.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q13" value="A"> A. common</label>
+                    <label class="option-label"><input type="radio" name="q13" value="B"> B. influent</label>
+                    <label class="option-label"><input type="radio" name="q13" value="C"> C. curious</label>
+                    <label class="option-label"><input type="radio" name="q13" value="D"> D. mature</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q14">
+                <div class="question-text">Question 14. If household chores are shared, the __________ is lighter on everyone.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q14" value="A"> A. burden</label>
+                    <label class="option-label"><input type="radio" name="q14" value="B"> B. argument</label>
+                    <label class="option-label"><input type="radio" name="q14" value="C"> C. extension</label>
+                    <label class="option-label"><input type="radio" name="q14" value="D"> D. female</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q15">
+                <div class="question-text">Question 15. __________ buildings provide urban areas with enough accommodation.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q15" value="A"> A. High-rise</label>
+                    <label class="option-label"><input type="radio" name="q15" value="B"> B. Rising high</label>
+                    <label class="option-label"><input type="radio" name="q15" value="C"> C. Height rising</label>
+                    <label class="option-label"><input type="radio" name="q15" value="D"> D. Rise-high</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q16">
+                <div class="question-text">Question 16. There are various techniques you can use to try and avoid family __________.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q16" value="A"> A. argument</label>
+                    <label class="option-label"><input type="radio" name="q16" value="B"> B. debate</label>
+                    <label class="option-label"><input type="radio" name="q16" value="C"> C. conflict</label>
+                    <label class="option-label"><input type="radio" name="q16" value="D"> D. quarrel</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q17">
+                <div class="question-text">Question 17. Personal computers are nearly as __________ in American homes as televisions.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q17" value="A"> A. distance</label>
+                    <label class="option-label"><input type="radio" name="q17" value="B"> B. popular</label>
+                    <label class="option-label"><input type="radio" name="q17" value="C"> C. prominent</label>
+                    <label class="option-label"><input type="radio" name="q17" value="D"> D. dominant</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q18">
+                <div class="question-text">Question 18. Scientists are considering the widening __________ between the rich and the poor.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q18" value="A"> A. distance</label>
+                    <label class="option-label"><input type="radio" name="q18" value="B"> B. gap</label>
+                    <label class="option-label"><input type="radio" name="q18" value="C"> C. space</label>
+                    <label class="option-label"><input type="radio" name="q18" value="D"> D. surrounding</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q19">
+                <div class="question-text">Question 19. People must accept each other's __________ differences.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q19" value="A"> A. well-behaved</label>
+                    <label class="option-label"><input type="radio" name="q19" value="B"> B. extensive</label>
+                    <label class="option-label"><input type="radio" name="q19" value="C"> C. respectable</label>
+                    <label class="option-label"><input type="radio" name="q19" value="D"> D. cultural</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q20">
+                <div class="question-text">Question 20. Exercise classes are a good way to keep fit and improve your __________ life.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q20" value="A"> A. huge</label>
+                    <label class="option-label"><input type="radio" name="q20" value="B"> B. curious</label>
+                    <label class="option-label"><input type="radio" name="q20" value="C"> C. social</label>
+                    <label class="option-label"><input type="radio" name="q20" value="D"> D. generational</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q21">
+                <div class="question-text">Question 21. The screens __________ blue light that can prevent you from sleeping well.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q21" value="A"> A. give away</label>
+                    <label class="option-label"><input type="radio" name="q21" value="B"> B. give out</label>
+                    <label class="option-label"><input type="radio" name="q21" value="C"> C. give in</label>
+                    <label class="option-label"><input type="radio" name="q21" value="D"> D. give off</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q22">
+                <div class="question-text">Question 22. Some unhygienic conditions encourage the __________ of disease.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q22" value="A"> A. development</label>
+                    <label class="option-label"><input type="radio" name="q22" value="B"> B. increase</label>
+                    <label class="option-label"><input type="radio" name="q22" value="C"> C. decrease</label>
+                    <label class="option-label"><input type="radio" name="q22" value="D"> D. spread</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q23">
+                <div class="question-text">Question 23. Foot and mouth disease is caused by a highly __________ virus which animals either eat or inhale.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q23" value="A"> A. infect</label>
+                    <label class="option-label"><input type="radio" name="q23" value="B"> B. infection</label>
+                    <label class="option-label"><input type="radio" name="q23" value="C"> C. infectious</label>
+                    <label class="option-label"><input type="radio" name="q23" value="D"> D. infectiously</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q24">
+                <div class="question-text">Question 24. Future cities are __________ sustainable architecture and renewable energy systems.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q24" value="A"> A. run out of</label>
+                    <label class="option-label"><input type="radio" name="q24" value="B"> B. put off</label>
+                    <label class="option-label"><input type="radio" name="q24" value="C"> C. made up of</label>
+                    <label class="option-label"><input type="radio" name="q24" value="D"> D. taken after</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q25">
+                <div class="question-text">Question 25. We __________ since we left school.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q25" value="A"> A. don't meet</label>
+                    <label class="option-label"><input type="radio" name="q25" value="B"> B. haven't met</label>
+                    <label class="option-label"><input type="radio" name="q25" value="C"> C. hasn't met</label>
+                    <label class="option-label"><input type="radio" name="q25" value="D"> D. didn't meet</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q26">
+                <div class="question-text">Question 26. She __________ two miles and a half, and now she feels exhausted.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q26" value="A"> A. will have run</label>
+                    <label class="option-label"><input type="radio" name="q26" value="B"> B. was running</label>
+                    <label class="option-label"><input type="radio" name="q26" value="C"> C. has run</label>
+                    <label class="option-label"><input type="radio" name="q26" value="D"> D. has been running</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q27">
+                <div class="question-text">Question 27. I haven't met him again since we __________ school ten years ago.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q27" value="A"> A. have left</label>
+                    <label class="option-label"><input type="radio" name="q27" value="B"> B. leave</label>
+                    <label class="option-label"><input type="radio" name="q27" value="C"> C. left</label>
+                    <label class="option-label"><input type="radio" name="q27" value="D"> D. had left</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q28">
+                <div class="question-text">Question 28. Ba __________ the cap all day yesterday.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q28" value="A"> A. wear</label>
+                    <label class="option-label"><input type="radio" name="q28" value="B"> B. wears</label>
+                    <label class="option-label"><input type="radio" name="q28" value="C"> C. weared</label>
+                    <label class="option-label"><input type="radio" name="q28" value="D"> D. wore</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q29">
+                <div class="question-text">Question 29. You __________ tell anyone what I've revealed to you. It's still a secret.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q29" value="A"> A. mustn't</label>
+                    <label class="option-label"><input type="radio" name="q29" value="B"> B. had better not</label>
+                    <label class="option-label"><input type="radio" name="q29" value="C"> C. ought not to</label>
+                    <label class="option-label"><input type="radio" name="q29" value="D"> D. don't have to</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q30">
+                <div class="question-text">Question 30. We __________ go to work by car. Sky train is a wise choice during rush hour.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q30" value="A"> A. ought to</label>
+                    <label class="option-label"><input type="radio" name="q30" value="B"> B. mustn't</label>
+                    <label class="option-label"><input type="radio" name="q30" value="C"> C. shouldn't</label>
+                    <label class="option-label"><input type="radio" name="q30" value="D"> D. have to</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q31">
+                <div class="question-text">Question 31. All students __________ wear uniforms at school because it is a rule.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q31" value="A"> A. should</label>
+                    <label class="option-label"><input type="radio" name="q31" value="B"> B. have to</label>
+                    <label class="option-label"><input type="radio" name="q31" value="C"> C. ought to</label>
+                    <label class="option-label"><input type="radio" name="q31" value="D"> D. must</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q32">
+                <div class="question-text">Question 32. The project work in this semester is optional, so students __________ do it.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q32" value="A"> A. must</label>
+                    <label class="option-label"><input type="radio" name="q32" value="B"> B. have to</label>
+                    <label class="option-label"><input type="radio" name="q32" value="C"> C. don't have to</label>
+                    <label class="option-label"><input type="radio" name="q32" value="D"> D. mustn't</label>
+                </div>
+            </div>
+
+            <!-- CLOZE TEST PASSAGES -->
+            <div class="section-title">II. CLOZE TEST</div>
+
+            <!-- Passage 1 -->
+            <div class="reading-passage">
+                <strong>Passage 1: Generation Gap</strong>
+                Generation gap is a common (1) __________ used to describe the differences in attitudes, values and lifestyles between people of different age groups. These differences often lead to misunderstandings when parents and children have different expectations about education, careers and personal relationships. People may find it difficult to understand one another (2) __________ their different experiences, beliefs and social backgrounds. Such conflicts can occur between two or even three generations within the same family.
+                In traditional families, parents often believe that they should make important decisions for their children, from choosing schools to selecting future careers and marriage partners. They may try to (3) __________ everything according to their own expectations, believing that their experience will help their children avoid mistakes. However, young people increasingly want to make independent choices and pursue their own interests. There are many things children consider important, but their parents may think (4) __________ are unnecessary or impractical. Without open communication and mutual understanding, these differences can create tension and (5) __________ the generation gap even wider.
+            </div>
+
+            <div class="question-card" id="q33">
+                <div class="question-text">Passage 1 - Question 1:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q33" value="A"> A. name</label>
+                    <label class="option-label"><input type="radio" name="q33" value="B"> B. term</label>
+                    <label class="option-label"><input type="radio" name="q33" value="C"> C. description</label>
+                    <label class="option-label"><input type="radio" name="q33" value="D"> D. way</label>
+                </div>
+            </div>
+            <div class="question-card" id="q34">
+                <div class="question-text">Passage 1 - Question 2:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q34" value="A"> A. owing</label>
+                    <label class="option-label"><input type="radio" name="q34" value="B"> B. in spite of</label>
+                    <label class="option-label"><input type="radio" name="q34" value="C"> C. because of</label>
+                    <label class="option-label"><input type="radio" name="q34" value="D"> D. with</label>
+                </div>
+            </div>
+            <div class="question-card" id="q35">
+                <div class="question-text">Passage 1 - Question 3:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q35" value="A"> A. make</label>
+                    <label class="option-label"><input type="radio" name="q35" value="B"> B. put</label>
+                    <label class="option-label"><input type="radio" name="q35" value="C"> C. change</label>
+                    <label class="option-label"><input type="radio" name="q35" value="D"> D. arrange</label>
+                </div>
+            </div>
+            <div class="question-card" id="q36">
+                <div class="question-text">Passage 1 - Question 4:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q36" value="A"> A. which</label>
+                    <label class="option-label"><input type="radio" name="q36" value="B"> B. what</label>
+                    <label class="option-label"><input type="radio" name="q36" value="C"> C. those</label>
+                    <label class="option-label"><input type="radio" name="q36" value="D"> D. that</label>
+                </div>
+            </div>
+            <div class="question-card" id="q37">
+                <div class="question-text">Passage 1 - Question 5:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q37" value="A"> A. makes</label>
+                    <label class="option-label"><input type="radio" name="q37" value="B"> B. crosses</label>
+                    <label class="option-label"><input type="radio" name="q37" value="C"> C. does</label>
+                    <label class="option-label"><input type="radio" name="q37" value="D"> D. leaves</label>
+                </div>
+            </div>
+
+            <!-- Passage 2 -->
+            <div class="reading-passage">
+                <strong>Passage 2: Peer Pressure</strong>
+                When a person (1) __________ influenced by their friends or peers to behave in a certain way or adopt a particular type of behavior, dress, or attitude in order to fit in, this is peer pressure. Feeling accepted is a strong driving force for people of all ages, and so learning how to deal (2) __________ peer pressure—both positive and negative—is an important life skill. Peer pressure is usually perceived as something negative, such as when a person feels compelled by their peers—whether friends or not—to do something that they don't want to do. The teen years are a time when (3) __________ people experiment and push boundaries, often because they want to impress their friends. While negative peer pressure makes a person feel unhappy, unwell, or uncomfortable, positive peer pressure boosts a person's feelings of wellness and (4) __________. When individuals align themselves with positive people, the supportive atmosphere can lead to healthy choices. (5) __________, when friends join a club or sports team, or work hard to achieve good marks, it can have a positive effect on everyone in that group.
+            </div>
+
+            <div class="question-card" id="q38">
+                <div class="question-text">Passage 2 - Question 1:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q38" value="A"> A. remains</label>
+                    <label class="option-label"><input type="radio" name="q38" value="B"> B. are</label>
+                    <label class="option-label"><input type="radio" name="q38" value="C"> C. feels</label>
+                    <label class="option-label"><input type="radio" name="q38" value="D"> D. smells</label>
+                </div>
+            </div>
+            <div class="question-card" id="q39">
+                <div class="question-text">Passage 2 - Question 2:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q39" value="A"> A. to</label>
+                    <label class="option-label"><input type="radio" name="q39" value="B"> B. with</label>
+                    <label class="option-label"><input type="radio" name="q39" value="C"> C. for</label>
+                    <label class="option-label"><input type="radio" name="q39" value="D"> D. of</label>
+                </div>
+            </div>
+            <div class="question-card" id="q40">
+                <div class="question-text">Passage 2 - Question 3:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q40" value="A"> A. much</label>
+                    <label class="option-label"><input type="radio" name="q40" value="B"> B. a little</label>
+                    <label class="option-label"><input type="radio" name="q40" value="C"> C. another</label>
+                    <label class="option-label"><input type="radio" name="q40" value="D"> D. many</label>
+                </div>
+            </div>
+            <div class="question-card" id="q41">
+                <div class="question-text">Passage 2 - Question 4:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q41" value="A"> A. arguments</label>
+                    <label class="option-label"><input type="radio" name="q41" value="B"> B. conflicts</label>
+                    <label class="option-label"><input type="radio" name="q41" value="C"> C. anger</label>
+                    <label class="option-label"><input type="radio" name="q41" value="D"> D. happiness</label>
+                </div>
+            </div>
+            <div class="question-card" id="q42">
+                <div class="question-text">Passage 2 - Question 5:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q42" value="A"> A. For example</label>
+                    <label class="option-label"><input type="radio" name="q42" value="B"> B. However</label>
+                    <label class="option-label"><input type="radio" name="q42" value="C"> C. Therefore</label>
+                    <label class="option-label"><input type="radio" name="q42" value="D"> D. As a result</label>
+                </div>
+            </div>
+
+            <!-- Passage 3 -->
+            <div class="reading-passage">
+                <strong>Passage 3: Zumba</strong>
+                Zumba is a(n) (1) __________ popular dance fitness program featuring Latin inspired dance moves to energetic music. It's been called the "world's biggest fitness party" by its followers, with over 14 million people taking weekly classes, four million Zumba DVDs sold, and a line of "Zumbawear" clothing that has taken off.
+                The concept of Zumba came about by mistake, (2) __________ the quick thinking of a fitness instructor named Beto Perez. He was about to teach an aerobics class in his hometown of Cali, Colombia, when he realized he had forgotten his aerobics dance music. He only had one cassette tape with him (3) __________ full of Latin music.
+                "I improvised," he said, "and that was the beginning of Zumba." Instead of traditional dance-fitness classes where steps are counted out loud to the beat of the music, Zumba has a free-flowing and party atmosphere. This proved popular with people who were (4) __________ with working out, and Zumba moved from just (5) __________ fitness fad to a true fitness phenomenon.
+            </div>
+
+            <div class="question-card" id="q43">
+                <div class="question-text">Passage 3 - Question 1:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q43" value="A"> A. horribly</label>
+                    <label class="option-label"><input type="radio" name="q43" value="B"> B. largely</label>
+                    <label class="option-label"><input type="radio" name="q43" value="C"> C. immensely</label>
+                    <label class="option-label"><input type="radio" name="q43" value="D"> D. willingly</label>
+                </div>
+            </div>
+            <div class="question-card" id="q44">
+                <div class="question-text">Passage 3 - Question 2:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q44" value="A"> A. due to</label>
+                    <label class="option-label"><input type="radio" name="q44" value="B"> B. despite</label>
+                    <label class="option-label"><input type="radio" name="q44" value="C"> C. regarding</label>
+                    <label class="option-label"><input type="radio" name="q44" value="D"> D. thanks to</label>
+                </div>
+            </div>
+            <div class="question-card" id="q45">
+                <div class="question-text">Passage 3 - Question 3:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q45" value="A"> A. which</label>
+                    <label class="option-label"><input type="radio" name="q45" value="B"> B. whom</label>
+                    <label class="option-label"><input type="radio" name="q45" value="C"> C. where</label>
+                    <label class="option-label"><input type="radio" name="q45" value="D"> D. who</label>
+                </div>
+            </div>
+            <div class="question-card" id="q46">
+                <div class="question-text">Passage 3 - Question 4:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q46" value="A"> A. addicted</label>
+                    <label class="option-label"><input type="radio" name="q46" value="B"> B. fed up</label>
+                    <label class="option-label"><input type="radio" name="q46" value="C"> C. dedicated</label>
+                    <label class="option-label"><input type="radio" name="q46" value="D"> D. interested</label>
+                </div>
+            </div>
+            <div class="question-card" id="q47">
+                <div class="question-text">Passage 3 - Question 5:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q47" value="A"> A. every</label>
+                    <label class="option-label"><input type="radio" name="q47" value="B"> B. much</label>
+                    <label class="option-label"><input type="radio" name="q47" value="C"> C. another</label>
+                    <label class="option-label"><input type="radio" name="q47" value="D"> D. other</label>
+                </div>
+            </div>
+
+            <!-- Passage 4 -->
+            <div class="reading-passage">
+                <strong>Passage 4: Cradle to Grave by Pharmacopoeia</strong>
+                Cradle to grave explores our approach to health in Britain today. The piece consists of a lifetime supply of (1) __________ drugs knitted into two lengths of fabric, illustrating the medical stories of one woman and one man. Each length contains over 14,000 drugs. This does not include pills we might buy over the counter, (2) __________ would require about 40,000 pills each.
+                Some of the treatments are common to both: each starts at birth with an injection of vitamin K and immunisations, and both take antibiotics and painkillers at various times. Other treatments are more specific. The woman has a relatively healthy life, but (3) __________ from arthritis and diabetes in middle age. The man has asthma and hay fever when young, (4) __________ enjoys good health until his 50s. He finally stops smoking after a bad chest infection when he is 70. He is treated for high blood pressure for the last 10 years of his life and has a heart attack and dies of a stroke in his 70s. He takes as many pills in the last 10 years of his life as in the first 66.
+                Cradle to grave also contains family photographs and (5) __________ personal objects and documents. The captions, written by the owners, trace typical events in people's lives. These show that maintaining a sense of well-being is more complex than just treating episodes of illness.
+            </div>
+
+            <div class="question-card" id="q48">
+                <div class="question-text">Passage 4 - Question 1:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q48" value="A"> A. described</label>
+                    <label class="option-label"><input type="radio" name="q48" value="B"> B. predicted</label>
+                    <label class="option-label"><input type="radio" name="q48" value="C"> C. allotted</label>
+                    <label class="option-label"><input type="radio" name="q48" value="D"> D. prescribed</label>
+                </div>
+            </div>
+            <div class="question-card" id="q49">
+                <div class="question-text">Passage 4 - Question 2:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q49" value="A"> A. that</label>
+                    <label class="option-label"><input type="radio" name="q49" value="B"> B. which</label>
+                    <label class="option-label"><input type="radio" name="q49" value="C"> C. whom</label>
+                    <label class="option-label"><input type="radio" name="q49" value="D"> D. whose</label>
+                </div>
+            </div>
+            <div class="question-card" id="q50">
+                <div class="question-text">Passage 4 - Question 3:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q50" value="A"> A. stems</label>
+                    <label class="option-label"><input type="radio" name="q50" value="B"> B. removes</label>
+                    <label class="option-label"><input type="radio" name="q50" value="C"> C. suffers</label>
+                    <label class="option-label"><input type="radio" name="q50" value="D"> D. bars</label>
+                </div>
+            </div>
+            <div class="question-card" id="q51">
+                <div class="question-text">Passage 4 - Question 4:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q51" value="A"> A. but</label>
+                    <label class="option-label"><input type="radio" name="q51" value="B"> B. so</label>
+                    <label class="option-label"><input type="radio" name="q51" value="C"> C. nor</label>
+                    <label class="option-label"><input type="radio" name="q51" value="D"> D. although</label>
+                </div>
+            </div>
+            <div class="question-card" id="q52">
+                <div class="question-text">Passage 4 - Question 5:</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q52" value="A"> A. another</label>
+                    <label class="option-label"><input type="radio" name="q52" value="B"> B. every</label>
+                    <label class="option-label"><input type="radio" name="q52" value="C"> C. other</label>
+                    <label class="option-label"><input type="radio" name="q52" value="D"> D. one</label>
+                </div>
+            </div>
+
+            <!-- READING COMPREHENSION SECTION -->
+            <div class="section-title">III. READING COMPREHENSION</div>
+
+            <!-- Reading Passage I -->
+            <div class="reading-passage">
+                <strong>Reading Passage I</strong>
+                The New Year is the most popular time for many people to think about what they eat and to try to be healthier. However, it is not always easy to change what you eat and many people give up their healthy diet after just a few weeks. Here is some advice to help you continue your diet, and to feel healthier and happier.
+                <strong>Healthy Snacks</strong>
+                Most of us get hungry between meals, especially after a busy day at work or school. A lot of people will eat the first thing they can find and this is often something not so healthy, like a bar of chocolate or some biscuits. To avoid eating these unhealthy snacks, cut up some fresh fruit and vegetables and keep them in the fridge for when you are feeling hungry. Dried fruit and nuts are also healthy snacks and will hopefully stop you from eating chocolate or biscuits when you feel like eating something sweet.
+                <strong>Cooking at Home</strong>
+                It is good to cook at home when you are following a healthy diet, because then you will know exactly what you are eating. You can make your cooking healthier by using less sugar, oil and salt. Instead, use herbs and spices to give your dishes more flavour. When you cook meat or fish, try to grill or boil it rather than frying. Always include plenty of fresh, steamed or boiled green vegetables as part of your meal. You may find it useful to buy a cookery book of healthy recipes, or to look up healthy recipes online.
+            </div>
+
+            <div class="question-card" id="q53">
+                <div class="question-text">Question 1. What is the main idea of the passage?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q53" value="A"> A. Continuing healthy diets</label>
+                    <label class="option-label"><input type="radio" name="q53" value="B"> B. Tips for healthy eating</label>
+                    <label class="option-label"><input type="radio" name="q53" value="C"> C. How to be healthier</label>
+                    <label class="option-label"><input type="radio" name="q53" value="D"> D. Healthy snacks and cooking at home</label>
+                </div>
+            </div>
+            <div class="question-card" id="q54">
+                <div class="question-text">Question 2. The word "flavour" in the third paragraph is closest in meaning to</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q54" value="A"> A. colour</label>
+                    <label class="option-label"><input type="radio" name="q54" value="B"> B. taste</label>
+                    <label class="option-label"><input type="radio" name="q54" value="C"> C. favourite</label>
+                    <label class="option-label"><input type="radio" name="q54" value="D"> D. value</label>
+                </div>
+            </div>
+            <div class="question-card" id="q55">
+                <div class="question-text">Question 3. It can be inferred from the passage that</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q55" value="A"> A. cooking at home helps you save money</label>
+                    <label class="option-label"><input type="radio" name="q55" value="B"> B. bananas and oranges are healthy snacks</label>
+                    <label class="option-label"><input type="radio" name="q55" value="C"> C. boiled meat is less popular than fried meat</label>
+                    <label class="option-label"><input type="radio" name="q55" value="D"> D. eating biscuits is useful for your health</label>
+                </div>
+            </div>
+            <div class="question-card" id="q56">
+                <div class="question-text">Question 4. It is good to cook at home because</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q56" value="A"> A. you can buy a cookery book of healthy recipes</label>
+                    <label class="option-label"><input type="radio" name="q56" value="B"> B. you can cook healthy food with more salt and sugar</label>
+                    <label class="option-label"><input type="radio" name="q56" value="C"> C. you know exactly what is included in the dishes</label>
+                    <label class="option-label"><input type="radio" name="q56" value="D"> D. you can look for recipes online</label>
+                </div>
+            </div>
+            <div class="question-card" id="q57">
+                <div class="question-text">Question 5. Which of the following statements is TRUE, according to the passage?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q57" value="A"> A. It's always difficult to change what you eat.</label>
+                    <label class="option-label"><input type="radio" name="q57" value="B"> B. Fresh vegetables should not be a part of your meal.</label>
+                    <label class="option-label"><input type="radio" name="q57" value="C"> C. Dried fruits and nuts cannot replace chocolates and biscuits.</label>
+                    <label class="option-label"><input type="radio" name="q57" value="D"> D. Herbs and spices may make your dishes better.</label>
+                </div>
+            </div>
+
+            <!-- Reading Passage II -->
+            <div class="reading-passage">
+                <strong>Reading Passage II</strong>
+                The term virus is derived from the Latin word for poison or slime. It was originally applied to the noxious stench emanating from swamps that was thought to cause a variety of diseases in the centuries before microbes were discovered and specifically linked to illness. But it was not until almost the end of the nineteenth century that a true virus was proven to be the cause of a disease.
+                The nature of viruses made them impossible to detect for many years even after bacteria had been discovered and studied. Not only are viruses too small to be seen with a light microscope, they also cannot be detected through their biological activity, except as it occurs in conjunction with other organisms. In fact, viruses show no traces of biological activity by themselves.
+                Unlike bacteria, they are not living agents in the strictest sense. Viruses are very simple pieces of organic material composed only of nucleic acid, either DNA or RNA, enclosed in a coat of protein made up of simple structural units. They are parasites, requiring human, animal, or plant cells to live. The virus replicates by attaching to a cell and injecting its nucleic acid. Once inside the cell, the DNA or RNA that contains the virus' genetic information takes over the cell's biological machinery, and the cell begins to manufacture viral proteins rather than its own.
+            </div>
+
+            <div class="question-card" id="q58">
+                <div class="question-text">Question 1. Which of the following is the best title for the passage?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q58" value="A"> A. New Developments in Viral Research</label>
+                    <label class="option-label"><input type="radio" name="q58" value="B"> B. Exploring the Causes of Disease</label>
+                    <label class="option-label"><input type="radio" name="q58" value="C"> C. DNA: Nature's Building Block</label>
+                    <label class="option-label"><input type="radio" name="q58" value="D"> D. Understanding Viruses</label>
+                </div>
+            </div>
+            <div class="question-card" id="q59">
+                <div class="question-text">Question 2. The word "noxious" in the first paragraph is closet in meaning to</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q59" value="A"> A. deadly</label>
+                    <label class="option-label"><input type="radio" name="q59" value="B"> B. threatening</label>
+                    <label class="option-label"><input type="radio" name="q59" value="C"> C. menacing</label>
+                    <label class="option-label"><input type="radio" name="q59" value="D"> D. intimidating</label>
+                </div>
+            </div>
+            <div class="question-card" id="q60">
+                <div class="question-text">Question 3. According to paragraph 2, why viruses are difficult to detect?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q60" value="A"> A. Because they often exist alongside other species, making it difficult for scientists to identify their presence.</label>
+                    <label class="option-label"><input type="radio" name="q60" value="B"> B. Because they are too small to be observed clearly even when examined through a light microscope.</label>
+                    <label class="option-label"><input type="radio" name="q60" value="C"> C. Because viruses are tiny to be seen and show no traces of biological activity on their own.</label>
+                    <label class="option-label"><input type="radio" name="q60" value="D"> D. Because they are extremely weak and can be destroyed easily before scientists have a chance to identify them.</label>
+                </div>
+            </div>
+            <div class="question-card" id="q61">
+                <div class="question-text">Question 4. The word "they" in paragraph 3 refers to</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q61" value="A"> A. viruses</label>
+                    <label class="option-label"><input type="radio" name="q61" value="B"> B. bacteria</label>
+                    <label class="option-label"><input type="radio" name="q61" value="C"> C. cells</label>
+                    <label class="option-label"><input type="radio" name="q61" value="D"> D. organisms</label>
+                </div>
+            </div>
+            <div class="question-card" id="q62">
+                <div class="question-text">Question 5. Which of the following is TRUE, according to the passage?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q62" value="A"> A. Bacteria and viruses are simultaneously identified.</label>
+                    <label class="option-label"><input type="radio" name="q62" value="B"> B. Experts are inventing ways to detect viruses more effectively.</label>
+                    <label class="option-label"><input type="radio" name="q62" value="C"> C. Viruses are like parasites that need a host to live.</label>
+                    <label class="option-label"><input type="radio" name="q62" value="D"> D. In the early 19th century, a real virus was shown to cause a disease.</label>
+                </div>
+            </div>
+
+            <!-- Reading Passage III -->
+            <div class="reading-passage">
+                <strong>Reading Passage III: THE AMERICAN FAMILY TODAY</strong>
+                The nuclear family, consisting of a mother, a father, and their children, is often considered the ideal family structure in American society. However, this image may represent an American ideal more than the reality of everyday life. In fact, the traditional American family has always been more diverse than many people assume. Different racial, ethnic, social, and religious groups have developed their own customs and values, which have influenced the way families are organised and how family members interact with one another. As a result, there has never been just one family pattern that accurately represents all Americans.
+                The most recent government statistics reveal that only about one third of all current American families fit the traditional model. Another third consists of married couples who either have no children or have no children still living at home. Of the remaining households, approximately 20 percent of the total are made up of people living alone, usually women over sixty-five years old. A smaller proportion, about 3 percent, consists of unmarried couples who choose to live together without getting married. The remaining 7 percent are single parents, often divorced, who live with at least one child. These figures demonstrate that American households differ considerably in size, structure, and lifestyle.
+                Today, these various family arrangements have become increasingly common and are generally accepted as normal parts of society. Although the traditional nuclear family remains an important social ideal, it is no longer the only model of family life. Many Americans appear to have established stable and supportive relationships in different family settings. What matters most is not necessarily whether a family follows the traditional pattern, but whether its members care for one another, share responsibilities, and provide emotional support. This suggests that the meaning of family has gradually expanded to reflect the changing needs and circumstances of modern American society.
+            </div>
+
+            <div class="question-card" id="q63">
+                <div class="question-text">Question 1. With what topic is the passage mainly concerned?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q63" value="A"> A. The traditional American family.</label>
+                    <label class="option-label"><input type="radio" name="q63" value="B"> B. The nuclear family.</label>
+                    <label class="option-label"><input type="radio" name="q63" value="C"> C. The current American family.</label>
+                    <label class="option-label"><input type="radio" name="q63" value="D"> D. The ideal family</label>
+                </div>
+            </div>
+            <div class="question-card" id="q64">
+                <div class="question-text">Question 2. According to the passage, the author implies that</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q64" value="A"> A. there have always been a wider variety of family arrangements in the United States.</label>
+                    <label class="option-label"><input type="radio" name="q64" value="B"> B. racial, ethnic, and religious groups have maintained the traditional family structure in American society.</label>
+                    <label class="option-label"><input type="radio" name="q64" value="C"> C. the ideal US family is considered the best structure for raising children and maintaining social values.</label>
+                    <label class="option-label"><input type="radio" name="q64" value="D"> D. fewer married couples are choosing to have children than in previous generations of American society.</label>
+                </div>
+            </div>
+            <div class="question-card" id="q65">
+                <div class="question-text">Question 3. The word "current" in the first sentence of paragraph 2 could be best replaced by which of the following?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q65" value="A"> A. typical</label>
+                    <label class="option-label"><input type="radio" name="q65" value="B"> B. present</label>
+                    <label class="option-label"><input type="radio" name="q65" value="C"> C. perfect</label>
+                    <label class="option-label"><input type="radio" name="q65" value="D"> D. traditional</label>
+                </div>
+            </div>
+            <div class="question-card" id="q66">
+                <div class="question-text">Question 4. According to the passage, married couples whose children have grown or who have no children represent</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q66" value="A"> A. 33 percent of households.</label>
+                    <label class="option-label"><input type="radio" name="q66" value="B"> B. 20 percent of households.</label>
+                    <label class="option-label"><input type="radio" name="q66" value="C"> C. 7 percent of households.</label>
+                    <label class="option-label"><input type="radio" name="q66" value="D"> D. 3 percent of households.</label>
+                </div>
+            </div>
+            <div class="question-card" id="q67">
+                <div class="question-text">Question 5. Who generally constitutes a one-person household?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q67" value="A"> A. A single man in his twenties.</label>
+                    <label class="option-label"><input type="radio" name="q67" value="B"> B. An elderly man.</label>
+                    <label class="option-label"><input type="radio" name="q67" value="C"> C. A single woman in her late sixties.</label>
+                    <label class="option-label"><input type="radio" name="q67" value="D"> D. A divorced woman</label>
+                </div>
+            </div>
+
+            <!-- Reading Passage IV -->
+            <div class="reading-passage">
+                <strong>Reading Passage IV</strong>
+                In 2002, several obese teenagers in the USA sued McDonald's, claiming that the company was responsible for making them fat. They argued that McDonald's deliberately misled them into thinking that their cheeseburgers and other products were healthy and nutritious food. They claimed that the company had not warned them about the health problems that can result from eating too much salty, high-fat food and drinking too many sugary drinks: diabetes, high blood pressure and obesity. The mother of one of the children, who at the age of 15 weighed more than 180 kilograms, said in her statement: "I always believed McDonald's was healthy for my son."
+                McDonald's rejected the claim that they were responsible for these teenagers' health problems. "People don't go to sleep thin and wake up obese," said McDonald's lawyer, Brad Lerman. "The understanding of what hamburgers and French fries do has been with us for a long, long time," he added. The judge agreed, and dismissed the case, saying: "It is not the place of the law to protect people against their own excesses." In other words, if people choose to eat a lot of unhealthy food, they can't blame the company that sold it to them.
+                Other similar lawsuits against fast food companies in the USA have also failed. In 2005, the US House of Representatives passed a bill which became known as the 'Cheeseburger Bill'. It made it much harder for obese people to take legal action against the food industry. However, the bill has not ended the arguments about responsibility. There is some scientific evidence to suggest that fast food is addictive, and harmful too. So is selling fast food the same, in a way, as drug-dealing?
+            </div>
+
+            <div class="question-card" id="q68">
+                <div class="question-text">Question 1. Which of the following is the best title for the passage?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q68" value="A"> A. Obesity in the USA</label>
+                    <label class="option-label"><input type="radio" name="q68" value="B"> B. Is fast food addictive?</label>
+                    <label class="option-label"><input type="radio" name="q68" value="C"> C. Is fast food really healthy?</label>
+                    <label class="option-label"><input type="radio" name="q68" value="D"> D. How to get rid of fast food.</label>
+                </div>
+            </div>
+            <div class="question-card" id="q69">
+                <div class="question-text">Question 2. According to the obese teenagers in the USA who sued McDonald's, which of the following health problems was NOT mentioned?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q69" value="A"> A. diabetes</label>
+                    <label class="option-label"><input type="radio" name="q69" value="B"> B. hypertension</label>
+                    <label class="option-label"><input type="radio" name="q69" value="C"> C. obesity</label>
+                    <label class="option-label"><input type="radio" name="q69" value="D"> D. heart disease</label>
+                </div>
+            </div>
+            <div class="question-card" id="q70">
+                <div class="question-text">Question 3. In paragraph 2, the word "rejected" is closest in meaning to</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q70" value="A"> A. denied</label>
+                    <label class="option-label"><input type="radio" name="q70" value="B"> B. accepted</label>
+                    <label class="option-label"><input type="radio" name="q70" value="C"> C. ignored</label>
+                    <label class="option-label"><input type="radio" name="q70" value="D"> D. agreed</label>
+                </div>
+            </div>
+            <div class="question-card" id="q71">
+                <div class="question-text">Question 4. In paragraph 2, the word "it" refers to</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q71" value="A"> A. law</label>
+                    <label class="option-label"><input type="radio" name="q71" value="B"> B. healthy food</label>
+                    <label class="option-label"><input type="radio" name="q71" value="C"> C. unhealthy food</label>
+                    <label class="option-label"><input type="radio" name="q71" value="D"> D. bill</label>
+                </div>
+            </div>
+            <div class="question-card" id="q72">
+                <div class="question-text">Question 5. What happens if people choose to eat a lot of unhealthy food?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q72" value="A"> A. The company will be responsible for their health problems.</label>
+                    <label class="option-label"><input type="radio" name="q72" value="B"> B. They may get financial support from the company.</label>
+                    <label class="option-label"><input type="radio" name="q72" value="C"> C. They will surely succeed in lawsuits.</label>
+                    <label class="option-label"><input type="radio" name="q72" value="D"> D. They can't force the company to be responsible for them.</label>
+                </div>
+            </div>
+            <div class="question-card" id="q73">
+                <div class="question-text">Question 6. In paragraph 3, the word "failed" is closest in meaning to</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q73" value="A"> A. not successful</label>
+                    <label class="option-label"><input type="radio" name="q73" value="B"> B. not important</label>
+                    <label class="option-label"><input type="radio" name="q73" value="C"> C. not famous</label>
+                    <label class="option-label"><input type="radio" name="q73" value="D"> D. not proud</label>
+                </div>
+            </div>
+            <div class="question-card" id="q74">
+                <div class="question-text">Question 7. According to the passage, which of the following is NOT TRUE about fast food?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q74" value="A"> A. salty and high-fat</label>
+                    <label class="option-label"><input type="radio" name="q74" value="B"> B. addictive</label>
+                    <label class="option-label"><input type="radio" name="q74" value="C"> C. nutritious</label>
+                    <label class="option-label"><input type="radio" name="q74" value="D"> D. harmful</label>
+                </div>
+            </div>
+
+            <!-- Reading Passage V -->
+            <div class="reading-passage">
+                <strong>Reading Passage V</strong>
+                Nuclear family, also called elementary family, in sociology and anthropology, is a group of people who are united by ties of partnership and parenthood and consisting of a pair of adults and their socially recognized children. Typically, but not always, the adults in a nuclear family are married. Although such couples are most often a man and a woman, the definition of the nuclear family has expanded with the advent of same-sex marriage. Children in a nuclear family may be the couple's biological or adopted offspring.
+                Thus defined, the nuclear family was once widely held to be the most basic and universal form of social organization. Anthropological research, however, has illuminated so much variability of this form that it is safer to assume that what is universal is a "nuclear family complex" in which the roles of husband, wife, mother, father, son, daughter, brother, and sister are embodied by people whose biological relationships do not necessarily conform to the Western definitions of these terms. In matrilineal societies, for example, a child may be the responsibility not of his biological genitor but of his mother's brother, who fulfills the roles typical of Western fatherhood.
+                Closely related in form to the predominant nuclear-family unit are the conjugal family and the consanguineal family. As its name implies, the conjugal family is knit together primarily by the marriage tie and consists of mother, father, their children, and some close relatives. The consanguineal family, on the other hand, typically groups itself around a unilineal descent group known as a lineage, a form that reckons kinship through either the father's or the mother's line but not both. Whether a culture is patrilineal or matrilineal, a consanguineal family comprises lineage relatives and consists of parents, their children, and their children's children. Rules regarding lineage exogamy are common in these groups; within a given community, marriages thus create cross-cutting social and political ties between lineages.
+                The stability of the conjugal family depends on the quality of the marriage of the husband and wife, a relationship that is more emphasized in the kinds of industrialized, highly mobile societies that frequently demand that people reside away from their kin groups. The consanguineal family derives its stability from its corporate nature and its permanence, as its relationships emphasize the perpetuation of the line.
+            </div>
+
+            <div class="question-card" id="q75">
+                <div class="question-text">Question 1. What does the passage mainly discuss?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q75" value="A"> A. The definition of nuclear family</label>
+                    <label class="option-label"><input type="radio" name="q75" value="B"> B. The types of nuclear family</label>
+                    <label class="option-label"><input type="radio" name="q75" value="C"> C. The component of nuclear family</label>
+                    <label class="option-label"><input type="radio" name="q75" value="D"> D. The relationship of nuclear family</label>
+                </div>
+            </div>
+            <div class="question-card" id="q76">
+                <div class="question-text">Question 2. According to the passage, the following are members forming a nuclear family, EXCEPT</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q76" value="A"> A. a man and a woman</label>
+                    <label class="option-label"><input type="radio" name="q76" value="B"> B. a man and a man</label>
+                    <label class="option-label"><input type="radio" name="q76" value="C"> C. a woman and a woman</label>
+                    <label class="option-label"><input type="radio" name="q76" value="D"> D. children and children</label>
+                </div>
+            </div>
+            <div class="question-card" id="q77">
+                <div class="question-text">Question 3. The word "illuminated" in the second paragraph is closest in meaning to</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q77" value="A"> A. changed</label>
+                    <label class="option-label"><input type="radio" name="q77" value="B"> B. clarified</label>
+                    <label class="option-label"><input type="radio" name="q77" value="C"> C. improved</label>
+                    <label class="option-label"><input type="radio" name="q77" value="D"> D. confused</label>
+                </div>
+            </div>
+            <div class="question-card" id="q78">
+                <div class="question-text">Question 4. According to paragraph 3, which of the following is TRUE?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q78" value="A"> A. There are some similarities between conjugal and consanguineous family.</label>
+                    <label class="option-label"><input type="radio" name="q78" value="B"> B. The conjugal family depends on marriage to knit its members and close relatives.</label>
+                    <label class="option-label"><input type="radio" name="q78" value="C"> C. The consanguineous family relies on both father's and mother's line to form its group.</label>
+                    <label class="option-label"><input type="radio" name="q78" value="D"> D. The consanguineous family only consists parents and their children.</label>
+                </div>
+            </div>
+            <div class="question-card" id="q79">
+                <div class="question-text">Question 5. The word "lineage" in paragraph 3 could be best replaced by</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q79" value="A"> A. ancestry</label>
+                    <label class="option-label"><input type="radio" name="q79" value="B"> B. generation</label>
+                    <label class="option-label"><input type="radio" name="q79" value="C"> C. insertion</label>
+                    <label class="option-label"><input type="radio" name="q79" value="D"> D. incorporation</label>
+                </div>
+            </div>
+            <div class="question-card" id="q80">
+                <div class="question-text">Question 6. What does the word "its" in the last paragraph refer to?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q80" value="A"> A. the permanence's</label>
+                    <label class="option-label"><input type="radio" name="q80" value="B"> B. the nature's</label>
+                    <label class="option-label"><input type="radio" name="q80" value="C"> C. the stability's</label>
+                    <label class="option-label"><input type="radio" name="q80" value="D"> D. the consanguineous family's</label>
+                </div>
+            </div>
+            <div class="question-card" id="q81">
+                <div class="question-text">Question 7. What does the author imply in the last paragraph?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q81" value="A"> A. The married couples must maintain the quality of their marriage to meet the demand of modern society.</label>
+                    <label class="option-label"><input type="radio" name="q81" value="B"> B. Members in each family must preserve their family's basement to protect their stability.</label>
+                    <label class="option-label"><input type="radio" name="q81" value="C"> C. The permanence of the consanguineous family may emphasize its line in society.</label>
+                </div>
+            </div>
+
+            <!-- SECTION IV: REORDERING SENTENCES & PARAGRAPHS -->
+            <div class="section-title">IV. REORDERING SENTENCES & PARAGRAPHS</div>
+
+            <div class="question-card" id="q82">
+                <div class="question-text">
+                    Question 3.<br>
+                    a. I hope I will be able to witness more electric buses and cycling lanes because they could reduce air pollution and make travelling around the city more convenient.<br>
+                    b. Are there any changes you would like to see in our city in the future to make it more environmentally friendly?<br>
+                    c. Yeah! Better public transport could also reduce traffic jams and encourage people to use private cars less often.
+                </div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q82" value="A"> A. b - a - c</label>
+                    <label class="option-label"><input type="radio" name="q82" value="B"> B. a - b - c</label>
+                    <label class="option-label"><input type="radio" name="q82" value="C"> C. b - c - a</label>
+                    <label class="option-label"><input type="radio" name="q82" value="D"> D. c - b - a</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q83">
+                <div class="question-text">
+                    Question 4.<br>
+                    a. What do you think we should eat every day to stay healthy and reduce the risk of getting sick?<br>
+                    b. Exactly! A balanced diet can help us maintain a healthy weight and reduce the risk of developing diseases in the future.<br>
+                    c. From my point of view, we had better consume more fruit and vegetables, choose nutritious foods, and limit our intake of sugar and unhealthy fats.
+                </div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q83" value="A"> A. a - c - b</label>
+                    <label class="option-label"><input type="radio" name="q83" value="B"> B. a - b - c</label>
+                    <label class="option-label"><input type="radio" name="q83" value="C"> C. c - a - b</label>
+                    <label class="option-label"><input type="radio" name="q83" value="D"> D. b - a - c</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q84">
+                <div class="question-text">
+                    Question 5.<br>
+                    a. Also, volunteering helps students connect with the community, making them aware of the needs around them.<br>
+                    b. Last but not least, doing volunteer work can be a rewarding experience, as students feel good about helping others.<br>
+                    c. High school students benefit from doing voluntary work in many ways.<br>
+                    d. To start with, students who do voluntary work gain valuable real-world experience which can help in their future careers.
+                </div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q84" value="A"> A. c - d - a - b</label>
+                    <label class="option-label"><input type="radio" name="q84" value="B"> B. c - a - d - b</label>
+                    <label class="option-label"><input type="radio" name="q84" value="C"> C. d - c - a - b</label>
+                    <label class="option-label"><input type="radio" name="q84" value="D"> D. a - b - c - d</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q85">
+                <div class="question-text">
+                    Question 6.<br>
+                    a. However, many people struggle to get enough sleep due to various reasons such as stress, lifestyle factors, and sleep disorders.<br>
+                    b. Lack of sleep can lead to a range of health problems including impaired cognitive function, weakened immune system, and increased risk of chronic diseases.<br>
+                    c. Establishing a consistent sleep schedule, creating a relaxing bedtime routine, and maintaining a comfortable sleep environment are key strategies for improving sleep quality.<br>
+                    d. Getting enough quality...
+                </div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q85" value="A"> A. d - a - b - c</label>
+                    <label class="option-label"><input type="radio" name="q85" value="B"> B. a - b - c - d</label>
+                    <label class="option-label"><input type="radio" name="q85" value="C"> C. d - b - a - c</label>
+                    <label class="option-label"><input type="radio" name="q85" value="D"> D. c - d - a - b</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q86">
+                <div class="question-text">
+                    Question 7.<br>
+                    a. Global warming, driven primarily by human activities, has led to several consequences that threaten the stability of our planet.<br>
+                    b. To conclude, global warming's effects are complex and widespread, and immediate action is necessary to address these impacts.<br>
+                    c. One of the most immediate impacts is the rise in global temperatures, resulting in heatwaves, droughts, and wildfires.<br>
+                    d. Moreover, global warming worsens environmental issues like deforestation and habitat loss, changing ecosystems and driving species toward extinction.
+                </div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q86" value="A"> A. a - c - d - b</label>
+                    <label class="option-label"><input type="radio" name="q86" value="B"> B. a - d - c - b</label>
+                    <label class="option-label"><input type="radio" name="q86" value="C"> C. c - a - d - b</label>
+                    <label class="option-label"><input type="radio" name="q86" value="D"> D. b - a - c - d</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q87">
+                <div class="question-text">
+                    Question 8.<br>
+                    a. As a result, they may have more energy, sleep better, and reduce the risk of developing certain health problems.<br>
+                    b. Regular exercise is an important part of maintaining a long and healthy life, especially for people who spend many hours sitting.<br>
+                    c. For example, walking to school, cycling, or playing a sport can help people stay active without making major changes to their daily schedules.<br>
+                    d. For this reason, everyone should choose activities they enjoy and make them a regular part of their routine.
+                </div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q87" value="A"> A. b - c - a - d</label>
+                    <label class="option-label"><input type="radio" name="q87" value="B"> B. b - a - c - d</label>
+                    <label class="option-label"><input type="radio" name="q87" value="C"> C. c - b - a - d</label>
+                    <label class="option-label"><input type="radio" name="q87" value="D"> D. d - b - c - a</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q88">
+                <div class="question-text">
+                    Question 9.<br>
+                    Hi Sam,<br>
+                    a. You could start by preparing simple meals at home and replacing sugary drinks with water.<br>
+                    b. I also recommend exercising regularly and getting enough sleep to maintain good health as the second step.<br>
+                    c. You mentioned that you often feel tired after school, so I want to share some advice on developing a healthier lifestyle.<br>
+                    d. If you follow these suggestions consistently, I believe you may feel more energetic and concentrate better in class.<br>
+                    e. Another useful habit is to take short breaks while studying to reduce stress and protect your mental health.<br>
+                    Best wishes, Tom
+                </div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q88" value="A"> A. c - a - b - e - d</label>
+                    <label class="option-label"><input type="radio" name="q88" value="B"> B. c - b - a - e - d</label>
+                    <label class="option-label"><input type="radio" name="q88" value="C"> C. a - b - c - e - d</label>
+                    <label class="option-label"><input type="radio" name="q88" value="D"> D. c - a - e - b - d</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q89">
+                <div class="question-text">
+                    Question 10.<br>
+                    Dear Editor,<br>
+                    a. In addition, building more parks and cycling lanes would encourage residents to adopt greener habits.<br>
+                    b. I am writing to suggest several ways to make our city cleaner and more environmentally friendly.<br>
+                    c. These improvements would help reduce air pollution and make urban life healthier for local residents.<br>
+                    d. I hope the local authorities will consider these suggestions when planning future developments.<br>
+                    e. One effective solution would be to improve public transport so that fewer people depend on private cars.<br>
+                    Yours sincerely, Alex
+                </div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q89" value="A"> A. b - e - a - c - d</label>
+                    <label class="option-label"><input type="radio" name="q89" value="B"> B. b - a - e - c - d</label>
+                    <label class="option-label"><input type="radio" name="q89" value="C"> C. e - a - b - c - d</label>
+                    <label class="option-label"><input type="radio" name="q89" value="D"> D. b - e - c - a - d</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q90">
+                <div class="question-text">
+                    Question 11.<br>
+                    Hi Anna,<br>
+                    a. Since making these changes, I have felt more energetic and found it easier to concentrate during lessons.<br>
+                    b. You could also prepare healthy snacks in advance instead of buying fast food when you are busy.<br>
+                    c. You asked me how I stay healthy despite having a busy school schedule, so I would like to share my experience.<br>
+                    d. I started by going to bed earlier and taking a short walk every day after school.<br>
+                    e. These simple habits have helped me improve my daily routine without spending too much time or money.<br>
+                    Best wishes, Linda
+                </div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q90" value="A"> A. c - d - b - a - e</label>
+                    <label class="option-label"><input type="radio" name="q90" value="B"> B. c - a - d - b - e</label>
+                    <label class="option-label"><input type="radio" name="q90" value="C"> C. d - b - c - a - e</label>
+                    <label class="option-label"><input type="radio" name="q90" value="D"> D. c - d - a - b - e</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q91">
+                <div class="question-text">
+                    Question 12.<br>
+                    Dear City Council,<br>
+                    a. Moreover, installing smart traffic lights could help control the flow of vehicles and reduce waiting times at busy intersections.<br>
+                    b. I am writing to share some ideas for making our city more convenient and environmentally friendly in the future.<br>
+                    c. I believe these improvements would reduce pollution, save time, and make daily life better for local residents.<br>
+                    d. One important step would be to develop an efficient public transport system so that fewer people need to travel by private car.<br>
+                    e. I hope the council will consider these suggestions when developing future urban plans.<br>
+                    Yours faithfully, Daniel
+                </div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q91" value="A"> A. b - d - a - c - e</label>
+                    <label class="option-label"><input type="radio" name="q91" value="B"> B. b - a - d - c - e</label>
+                    <label class="option-label"><input type="radio" name="q91" value="C"> C. d - a - b - c - e</label>
+                    <label class="option-label"><input type="radio" name="q91" value="D"> D. b - d - c - a - e</label>
+                </div>
+            </div>
+
+            <button type="button" class="submit-btn" onclick="submitExam()">NỘP BÀI THI</button>
+        </form>
+
+        <div id="result-box"></div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="timer" id="timer">60:00</div>
+        <h3>Danh Sách Câu Hỏi</h3>
+        <div class="nav-grid" id="nav-grid">
+            <!-- Navigation buttons will be generated by JS -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Correct answers mapping
+    const answers = {
+        q1: 'A', q2: 'C', q3: 'C', q4: 'D', q5: 'C', q6: 'A', q7: 'B', q8: 'D', q9: 'B', q10: 'A',
+        q11: 'C', q12: 'C', q13: 'D', q14: 'A', q15: 'A', q16: 'C', q17: 'B', q18: 'B', q19: 'D', q20: 'C',
+        q21: 'D', q22: 'D', q23: 'C', q24: 'C', q25: 'B', q26: 'C', q27: 'C', q28: 'D', q29: 'A', q30: 'C',
+        q31: 'B', q32: 'C',
+        // Cloze 1
+        q33: 'B', q34: 'C', q35: 'D', q36: 'C', q37: 'A',
+        // Cloze 2
+        q38: 'C', q39: 'B', q40: 'D', q41: 'D', q42: 'A',
+        // Cloze 3
+        q43: 'C', q44: 'D', q45: 'A', q46: 'B', q47: 'C',
+        // Cloze 4
+        q48: 'D', q49: 'B', q50: 'C', q51: 'A', q52: 'C',
+        // Reading I
+        q53: 'B', q54: 'B', q55: 'B', q56: 'C', q57: 'D',
+        // Reading II
+        q58: 'D', q59: 'A', q60: 'C', q61: 'A', q62: 'C',
+        // Reading III
+        q63: 'C', q64: 'A', q65: 'B', q66: 'A', q67: 'C',
+        // Reading IV
+        q68: 'C', q69: 'D', q70: 'A', q71: 'A', q72: 'D', q73: 'A', q74: 'C',
+        // Reading V
+        q75: 'A', q76: 'D', q77: 'B', q78: 'B', q79: 'A', q80: 'D', q81: 'A',
+        // Reordering
+        q82: 'A', q83: 'A', q84: 'A', q85: 'A', q86: 'A', q87: 'A', q88: 'A', q89: 'A', q90: 'A', q91: 'A'
+    };
+
+    const totalQuestions = Object.keys(answers).length;
+
+    // Build sidebar nav
+    const navGrid = document.getElementById('nav-grid');
+    Object.keys(answers).forEach((qKey, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'nav-btn';
+        btn.innerText = index + 1;
+        btn.id = `nav-${qKey}`;
+        btn.onclick = () => {
+            document.getElementById(qKey).scrollIntoView({ behavior: 'smooth' });
+        };
+        navGrid.appendChild(btn);
+    });
+
+    // Track input selection
+    document.getElementById('exam-form').addEventListener('change', (e) => {
+        if (e.target.name) {
+            const qKey = e.target.name;
+            const navBtn = document.getElementById(`nav-${qKey}`);
+            if (navBtn) navBtn.classList.add('answered');
+        }
+    });
+
+    // Countdown Timer
+    let timeLeft = 3600; // 60 mins
+    const timerElem = document.getElementById('timer');
+    const timerInterval = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        timerElem.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert('Đã hết thời gian làm bài!');
+            submitExam();
+        }
+        timeLeft--;
+    }, 1000);
+
+    // Grade function
+    function submitExam() {
+        clearInterval(timerInterval);
+        let score = 0;
+        
+        Object.keys(answers).forEach((qKey) => {
+            const selected = document.querySelector(`input[name="${qKey}"]:checked`);
+            const qCard = document.getElementById(qKey);
+            const correctAns = answers[qKey];
+
+            if (selected) {
+                if (selected.value === correctAns) {
+                    score++;
+                    qCard.classList.add('correct-answer');
+                } else {
+                    qCard.classList.add('wrong-answer');
+                }
+            } else {
+                qCard.classList.add('wrong-answer');
+            }
+
+            // Highlight the correct radio label
+            const correctInput = qCard.querySelector(`input[value="${correctAns}"]`);
+            if (correctInput && correctInput.parentElement) {
+                correctInput.parentElement.style.fontWeight = 'bold';
+                correctInput.parentElement.style.color = '#155724';
+            }
+        });
+
+        const resultBox = document.getElementById('result-box');
+        const finalGrade = ((score / totalQuestions) * 10).toFixed(2);
+        resultBox.style.display = 'block';
+        resultBox.style.backgroundColor = '#e8f0fe';
+        resultBox.style.color = '#1a73e8';
+        resultBox.innerHTML = `Kết quả của bạn: ${score} / ${totalQuestions} câu đúng (${finalGrade} điểm)`;
+        
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
+```
